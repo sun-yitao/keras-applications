@@ -284,7 +284,7 @@ def _obtain_input_shape(input_shape,
         else:
             default_shape = (default_size, default_size, 3)
     if weights == 'imagenet' and require_flatten:
-        if input_shape is not None:
+        if input_shape is not None or None not in input_shape:
             if input_shape != default_shape:
                 raise ValueError('When setting `include_top=True` '
                                  'and loading `imagenet` weights, '
@@ -293,7 +293,7 @@ def _obtain_input_shape(input_shape,
         return default_shape
     if input_shape:
         if data_format == 'channels_first':
-            if input_shape is not None:
+            if input_shape is not None or None not in input_shape:
                 if len(input_shape) != 3:
                     raise ValueError(
                         '`input_shape` must be a tuple of three integers.')
@@ -307,7 +307,7 @@ def _obtain_input_shape(input_shape,
                                      '; got `input_shape=' +
                                      str(input_shape) + '`')
         else:
-            if input_shape is not None:
+            if input_shape is not None or None not in input_shape:
                 if len(input_shape) != 3:
                     raise ValueError(
                         '`input_shape` must be a tuple of three integers.')
@@ -328,9 +328,5 @@ def _obtain_input_shape(input_shape,
                 input_shape = (3, None, None)
             else:
                 input_shape = (None, None, 3)
-    if require_flatten:
-        if None in input_shape:
-            raise ValueError('If `include_top` is True, '
-                             'you should specify a static `input_shape`. '
-                             'Got `input_shape=' + str(input_shape) + '`')
+
     return input_shape
